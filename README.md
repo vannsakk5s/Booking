@@ -57,3 +57,37 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Flow
+
+├── app/
+│   ├── core/                  # Only essential app-wide singletons
+│   │   ├── auth.service.ts    # Handles login, tokens, user state
+│   │   ├── api.service.ts     # Central HTTP wrapper (HttpClient + interceptors)
+│   │   ├── config.ts          # AppConfig interface + injection token
+│   │   └── models/            # Shared interfaces (your "Interface" layer)
+│   │       ├── user.ts
+│   │       ├── product.ts
+│   │       └── api-response.ts
+│   │
+│   ├── services/              # Feature-specific or reusable services
+│   │   ├── user.service.ts
+│   │   ├── cart.service.ts
+│   │   └── notification.service.ts
+│   │
+│   ├── components/            # Reusable or page-level components
+│   │   ├── header.component.ts|html
+│   │   ├── product-list.component.ts|html
+│   │   └── login-form.component.ts|html
+│   │
+│   ├── pages/                 # Route-driven "smart" components
+│   │   ├── home-page/
+│   │   ├── product-page/
+│   │   └── profile-page/
+│   │
+│   ├── app.component.ts
+│   └── app.module.ts          # Declare components, import Core services
+│
+├── environments/
+├── assets/
+└── styles/
