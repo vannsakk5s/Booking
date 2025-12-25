@@ -1,0 +1,196 @@
+<div class="flex h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <aside class="w-100 bg-white shadow-lg border-r border-gray-200 flex flex-col">
+    
+    <!-- Logo -->
+    <div class="px-8 py-5 ">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-md">
+          <span class="text-white font-bold text-base">AB</span>
+        </div>
+        <span class="text-xl font-bold text-gray-800 tracking-tight">Admin Booking</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-4 py-6 space-y-1">
+
+      <!-- Dashboard -->
+      <a routerLink="/dashboard"
+        [ngClass]="{
+          'text-blue-700 bg-blue-50 border border-blue-100 shadow-sm': isDashboard,
+          'text-gray-600 hover:bg-blue-50 hover:text-blue-700': !isDashboard
+        }"
+        class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all group">
+        <svg class="w-5 h-5"
+            [ngClass]="{
+              'text-blue-600': isDashboard,
+              'text-gray-400 group-hover:text-blue-600': !isDashboard
+            }"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+        </svg>
+
+        <span class="font-medium">Dashboard</span>
+      </a>
+
+      <!-- Manage Trips -->
+      <a routerLink="/manage-trips"
+        [ngClass]="{
+          'text-blue-700 bg-blue-50 border border-blue-100 shadow-sm': isManageTrips,
+          'text-gray-600 hover:bg-blue-50 hover:text-blue-700': !isManageTrips
+        }"
+        class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all group">
+        <svg class="w-5 h-5"
+            [ngClass]="{
+              'text-blue-600': isManageTrips,
+              'text-gray-400 group-hover:text-blue-600': !isManageTrips
+            }"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+        </svg>
+
+        <span class="font-medium">Manage Trips</span>
+      </a>
+
+      <!-- Bookings -->
+      <a routerLink="/bookings"
+        [ngClass]="{
+          'text-blue-700 bg-blue-50 border border-blue-100 shadow-sm': isBookings,
+          'text-gray-600 hover:bg-blue-50 hover:text-blue-700': !isBookings
+        }"
+        class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all group">
+        <svg class="w-5 h-5"
+            [ngClass]="{
+              'text-blue-600': isBookings,
+              'text-gray-400 group-hover:text-blue-600': !isBookings
+            }"
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3h8v4m-6 4v6m4-6v6M5 21h14a2 2 0 002-2v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7a2 2 0 002 2z"/>
+        </svg>
+        <span class="font-medium">Bookings</span>
+      </a>
+
+      <!-- Users -->
+      <a routerLink="/users"
+        [ngClass]="{
+          'text-blue-700 bg-blue-50 border border-blue-100 shadow-sm': isUsers,
+          'text-gray-600 hover:bg-blue-50 hover:text-blue-700': !isUsers
+        }"
+        class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all group">
+        <svg class="w-5 h-5"
+            [ngClass]="{
+              'text-blue-600': isUsers,
+              'text-gray-400 group-hover:text-blue-600': !isUsers
+            }"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+        </svg>
+        <span class="font-medium">Users</span>
+      </a>
+
+      <!-- Guides -->
+      <a routerLink="/guides"
+        [ngClass]="{
+          'text-blue-700 bg-blue-50 border border-blue-100 shadow-sm': isGuides,
+          'text-gray-600 hover:bg-blue-50 hover:text-blue-700': !isGuides
+        }"
+        class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all group">
+        <svg class="w-5 h-5" 
+            [ngClass]="{
+              'text-blue-600': isGuides,
+              'text-gray-400 group-hover:text-blue-600': !isGuides
+            }"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+        </svg>
+
+        <span class="font-medium">Guides</span>
+      </a>
+
+      <!-- Support Tickets -->
+      <a routerLink="/support-tickets"
+        [ngClass]="{
+          'text-blue-700 bg-blue-50 border border-blue-100 shadow-sm': isSupportTickets,
+          'text-gray-600 hover:bg-blue-50 hover:text-blue-700': !isSupportTickets
+        }"
+        class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all group">
+        <svg class="w-5 h-5"
+            [ngClass]="{
+              'text-blue-600': isSupportTickets,
+              'text-gray-400 group-hover:text-blue-600': !isSupportTickets
+            }"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+        </svg>
+
+        <span class="font-medium">Support Tickets</span>
+      </a>
+
+      <!-- Reports -->
+      <a routerLink="/reports"
+        [ngClass]="{
+          'text-blue-700 bg-blue-50 border border-blue-100 shadow-sm': isReports,
+          'text-gray-600 hover:bg-blue-50 hover:text-blue-700': !isReports
+        }"
+        class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all group">
+        <svg class="w-5 h-5"
+            [ngClass]="{
+              'text-blue-600': isReports,
+              'text-gray-400 group-hover:text-blue-600': !isReports
+            }" 
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+        </svg>
+
+        <span class="font-medium">Reports</span>
+      </a>
+
+      <!-- Settings -->
+      <a routerLink="/settings"
+        [ngClass]="{
+          'text-blue-700 bg-blue-50 border border-blue-100 shadow-sm': isSettings,
+          'text-gray-600 hover:bg-blue-50 hover:text-blue-700': !isSettings
+        }"
+        class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all group">
+        <svg class="w-5 h-5"
+            [ngClass]="{
+              'text-blue-600': isSettings,
+              'text-gray-400 group-hover:text-blue-600': !isSettings
+            }"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+        </svg>
+
+        <span class="font-medium">Settings</span>
+      </a>
+
+    </nav>
+
+    <!-- Footer user section -->
+    <div class="border-t border-gray-100 p-4 mt-auto">
+      <div class="flex items-center space-x-3 px-2 py-2.5 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+        <div class="w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center">
+          <span class="text-white font-semibold text-sm">AD</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium truncate">Admin User</p>
+          <p class="text-xs text-gray-500 truncate">admin@example.com</p>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <main class="flex-1 overflow-y-auto p-6 bg-gray-50 scrollbar-hide snap-x snap-mandatory">
+      <div class="max-w-[92%] mx-auto">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+
+</div>

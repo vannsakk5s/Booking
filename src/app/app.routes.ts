@@ -1,24 +1,58 @@
 import { Routes } from '@angular/router';
-// import { Dashboard } from './page/dashboard/dashboard/dashboard';
-// import { Trips } from './pages/trips/trips.';
-// import { Bookings } from './pages/bookings/bookings.';
-// import { Users } from './pages/users/users.';
-// import { Guides } from './pages/guides/guides.';
-// import { Tickets } from './pages/tickets/tickets.';
-// import { Reports } from './pages/reports/reports.';
-// import { Settings } from './pages/settings/settings.';
-// import { TripForm } from './pages/trips/trip-form/trip-form.';
+import { Layout } from './layout/layout/layout';
+
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-//   { path: 'dashboard', component: Dashboard },
-//   { path: 'trips', component: TripsComponent },
-//   { path: 'trips/new', component: TripFormComponent },
-//   { path: 'trips/edit/:id', component: TripFormComponent },
-//   { path: 'bookings', component: BookingsComponent },
-//   { path: 'users', component: UsersComponent },
-//   { path: 'guides', component: GuidesComponent },
-//   { path: 'tickets', component: TicketsComponent },
-//   { path: 'reports', component: ReportsComponent },
-//   { path: 'settings', component: SettingsComponent },
+    {
+        path: '', 
+        redirectTo: 'dashboard', 
+        pathMatch: 'full'
+    },
+    {
+        path: '',
+        component: Layout,
+        canActivate: [],
+        children: [
+            {
+              path: 'dashboard',
+              loadComponent: () => import('./page/dashboard/dashboard').then(c => c.Dashboard)
+            },
+            {
+              path: 'manage-trips',
+              loadComponent: () => import('./page/manage-trips/manage-trips').then(c => c.ManageTrips)
+            },
+            {
+              path: 'bookings',
+              loadComponent: () => import('./page/bookings/bookings').then(c => c.Bookings)
+            },
+            {
+              path: 'users',
+              loadComponent: () => import('./page/users/users').then(c => c.Users)
+            },
+            {
+              path: 'guides',
+              loadComponent: () => import('./page/guides/guides').then(c => c.Guides)
+            },
+            {
+              path: 'support-tickets',
+              loadComponent: () => import('./page/support-tickets/support-tickets').then(c => c.SupportTickets) 
+            },
+            {
+              path: 'reports',
+              loadComponent: () => import('./page/reports/reports').then(c => c.Reports)
+            },
+            {
+              path: 'settings',
+              loadComponent: () => import('./page/settings/settings').then(c => c.Settings)
+            }
+        ]
+    },
+    // {
+    //     path: 'login',
+    //     loadComponent: () => import('./components/login-page/login-page').then(c => c.LoginPage)
+    // },
+    {
+        path: '**',
+        redirectTo: 'dashboard'
+    }
 ];
