@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { Layout } from './layout/layout/layout';
-
+import { Login } from './page/login/login';
 
 export const routes: Routes = [
+  { path: 'login', component: Login },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
     {
         path: '', 
         redirectTo: 'dashboard', 
