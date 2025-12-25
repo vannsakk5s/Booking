@@ -10,7 +10,7 @@ import { Routes } from '@angular/router';
 // import { TripForm } from './pages/trips/trip-form/trip-form.';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 //   { path: 'dashboard', component: Dashboard },
 //   { path: 'trips', component: TripsComponent },
 //   { path: 'trips/new', component: TripFormComponent },
