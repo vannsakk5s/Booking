@@ -1,12 +1,254 @@
-<div class="p-6">
-  <!-- Header -->
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Manage Trips</h1>
-    <p class="text-gray-600">Welcome back! Here's what's happening with your inventory today.</p>
-  </div>
+<div class="min-h-screen bg-slate-50 p-4 md:p-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Trip Management</h1>
+        <p class="text-slate-500 text-sm font-medium">Total Trips: {{ totalItems() }}</p>
+      </div>
+      <button (click)="openCreateModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-semibold flex items-center gap-2 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+        Add New Trip
+      </button>
+    </div>
 
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    
+    <div class="flex items-center gap-2 mb-6 bg-slate-200/50 p-1.5 rounded-2xl w-fit">
+      @for (status of statusOptions; track status) {
+        <button (click)="filterByStatus(status)" 
+          [class]="selectedStatus() === status ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'"
+          class="px-5 py-2 rounded-xl text-sm font-bold capitalize transition-all">
+          {{ status }}
+        </button>
+      }
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+      <table class="w-full text-left">
+        <thead class="bg-slate-50 border-b border-slate-200">
+          <tr>
+            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Trip Details</th>
+            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Status</th>
+            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Price</th>
+            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @if (isLoading()) {
+            <tr><td colspan="4" class="px-6 py-12 text-center text-slate-400 animate-pulse">Loading trips...</td></tr>
+          } @else {
+            @for (trip of trips(); track trip.id) {
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-4">
+                    <img [src]="trip.images.length ? 'http://localhost:4000/' + trip.images[0] : 'assets/placeholder-trip.webp'" 
+                         class="w-12 h-12 rounded-xl object-cover border border-slate-200">
+                    <div>
+                      <div class="font-bold text-slate-800">{{ trip.title }}</div>
+                      <div class="text-xs text-indigo-500">{{ trip.destination }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <span [class]="getStatusClass(trip.status)">{{ trip.status }}</span>
+                </td>
+                <td class="px-6 py-4 font-bold">${{ trip.price }}</td>
+                <td class="px-6 py-4 text-right">
+                  <div class="flex justify-end gap-2">
+                    <button (click)="openViewModal(trip)" 
+                            class="flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-all">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      View
+                    </button>
+                    <button (click)="openEditModal(trip)" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
+<app-modal [isOpen]="isViewModalOpen()" [title]="selectedTripForView()?.title ?? 'Trip Details'" (close)="isViewModalOpen.set(false)">
+  @if (selectedTripForView(); as trip) {
+    <div class="space-y-6">
+      <div class="relative w-full h-64 rounded-3xl overflow-hidden bg-slate-100 border">
+        <img [src]="trip.images.length ? 'http://localhost:4000/' + trip.images[0] : 'assets/placeholder.webp'" class="w-full h-full object-cover">
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-4 bg-slate-50 rounded-2xl">
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Price</p>
+          <p class="text-xl font-black text-slate-800">${{ trip.price }}</p>
+        </div>
+        <div class="p-4 bg-slate-50 rounded-2xl">
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Destination</p>
+          <p class="text-sm font-bold text-indigo-600">{{ trip.destination }}</p>
+        </div>
+        <div class="p-4 bg-slate-50 rounded-2xl">
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Status</p>
+          <span [class]="getStatusClass(trip.status)">{{ trip.status }}</span>
+        </div>
+        <div class="p-4 bg-slate-50 rounded-2xl">
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Type</p>
+          <p class="text-sm font-bold text-slate-700 capitalize">{{ trip.type }}</p>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Description</h4>
+        <p class="text-slate-600 text-sm leading-relaxed">{{ trip.description }}</p>
+      </div>
+
+      <div class="p-5 bg-slate-50 rounded-3xl border border-slate-100">
+        <h4 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest">Itinerary</h4>
+        <div class="space-y-4">
+          <div class="flex gap-4">
+            <div class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-xs font-bold text-indigo-600 shrink-0">1</div>
+            <p class="text-sm text-slate-600">{{ trip.itinerary.day1 || 'No plans yet' }}</p>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-xs font-bold text-indigo-600 shrink-0">2</div>
+            <p class="text-sm text-slate-600">{{ trip.itinerary.day2 || 'No plans yet' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-4 border-t">
+        <button (click)="updateStatus(trip.id, trip.status === 'active' ? 'inactive' : 'active')" 
+                class="px-4 py-2 text-xs font-bold text-slate-500 border rounded-xl hover:bg-slate-50 transition-all">
+          Mark as {{ trip.status === 'active' ? 'Inactive' : 'Active' }}
+        </button>
+        <div class="flex gap-3">
+          <button (click)="isViewModalOpen.set(false)" class="px-6 py-2 text-sm font-bold text-slate-400">Close</button>
+          <button (click)="openEditModal(trip)" class="bg-indigo-600 text-white px-8 py-2.5 rounded-xl font-bold">Edit Details</button>
+        </div>
+      </div>
+    </div>
+  }
+</app-modal>
+
+<app-modal 
+    [isOpen]="isModalOpen()" 
+    [title]="editingTripId() ? 'Update Trip Details' : 'Create New Journey'" 
+    (close)="isModalOpen.set(false)">
+  
+  <form [formGroup]="tripForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      
+      <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Trip Cover Image</label>
+        <div class="flex items-start gap-4">
+          <label class="relative w-32 h-32 flex flex-col items-center justify-center bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl cursor-pointer hover:bg-slate-100 hover:border-indigo-400 transition-all overflow-hidden group">
+            @if (imagePreview()) {
+              <img [src]="imagePreview()" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span class="text-white text-[10px] font-bold text-center px-2">Change Cover Photo</span>
+              </div>
+            } @else {
+              <svg class="w-8 h-8 text-slate-300 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              <span class="text-[10px] font-medium text-slate-500">Upload Photo</span>
+            }
+            <input type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*">
+          </label>
+          <div class="py-2">
+            <h4 class="text-sm font-semibold text-slate-700">Cover Photo</h4>
+            <p class="text-[11px] text-slate-400 leading-relaxed max-w-[180px]">
+              Click the box to select a photo. <span class="text-indigo-500">JPG or PNG.</span>
+            </p>
+            @if (selectedFile) {
+              <div class="mt-2 text-[10px] font-bold text-emerald-600 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                Selected
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Trip Title</label>
+        <input type="text" formControlName="title" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Description</label>
+        <textarea formControlName="description" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none resize-none"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Destination</label>
+        <input type="text" formControlName="destination" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Trip Type</label>
+        <select formControlName="type" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none bg-white">
+          <option value="vip">VIP</option>
+          <option value="standard">Standard</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Start Date</label>
+        <input type="date" formControlName="start_date" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">End Date</label>
+        <input type="date" formControlName="end_date" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Price ($)</label>
+        <input type="number" formControlName="price" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Capacity (Persons)</label>
+        <input type="number" formControlName="capacity" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Status</label>
+        <select formControlName="status" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 outline-none bg-white">
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+      <div class="md:col-span-2 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+        <label class="block text-xs font-bold text-slate-500 uppercase mb-3">Trip Itinerary</label>
+        <div class="space-y-3">
+          <div class="flex gap-2">
+            <span class="bg-white px-3 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-400">Day 1</span>
+            <input type="text" #day1Input placeholder="Arrival & Activities" class="flex-1 px-4 py-2 rounded-lg border border-slate-200 outline-none">
+          </div>
+          <div class="flex gap-2">
+            <span class="bg-white px-3 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-400">Day 2</span>
+            <input type="text" #day2Input placeholder="Departure" class="flex-1 px-4 py-2 rounded-lg border border-slate-200 outline-none">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-slate-100">
+      <button type="button" (click)="isModalOpen.set(false)" class="px-6 py-2.5 text-slate-500 font-semibold hover:bg-slate-50 rounded-xl transition-all">
+        Cancel
+      </button>
+      <button type="submit" [disabled]="tripForm.invalid || isSubmitting()" 
+        class="bg-indigo-600 text-white px-8 py-2.5 rounded-xl font-bold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2">
+        @if (isSubmitting()) {
+          <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+        }
+        {{ editingTripId() ? 'Update Trip' : 'Create Trip' }}
+      </button>
+    </div>
+  </form>
+</app-modal>
