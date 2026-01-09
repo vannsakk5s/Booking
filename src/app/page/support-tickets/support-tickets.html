@@ -1,12 +1,86 @@
-<div class="p-6">
-  <!-- Header -->
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Support Tickets</h1>
-    <p class="text-gray-600">Welcome back! Here's what's happening with your inventory today.</p>
+<div class="p-6 bg-gray-50 min-h-screen">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Support Tickets</h1>
+      <p class="text-gray-500">Manage and resolve customer inquiries.</p>
+    </div>
+    
+    <div class="flex bg-white rounded-lg p-1 shadow-sm border">
+      @for (label of ['All', 'Open', 'In_Progress', 'Resolved']; track label) {
+        <button (click)="fetchTickets(label === 'All' ? '' : label.toLowerCase())"
+          [class]="selectedStatus() === (label === 'All' ? '' : label.toLowerCase()) ? 'bg-blue-600 text-white' : 'text-gray-600'"
+          class="px-4 py-1.5 rounded-md text-sm font-medium transition capitalize">
+          {{ label.replace('_', ' ') }}
+        </button>
+      }
+    </div>
   </div>
 
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-xs font-bold text-red-500 uppercase">Unassigned/Open</p>
+      <h3 class="text-3xl font-bold text-gray-900 mt-1">{{ openTickets() }}</h3>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-xs font-bold text-blue-500 uppercase">In Progress</p>
+      <h3 class="text-3xl font-bold text-gray-900 mt-1">{{ inProgressTickets() }}</h3>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <table class="w-full text-left">
+      <thead class="bg-gray-50 border-b border-gray-200">
+        <tr>
+          <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Subject</th>
+          <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Customer</th>
+          <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Assignee</th>
+          <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
+          <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        @for (ticket of tickets(); track ticket.id) {
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4">
+              <div class="text-sm font-bold text-gray-900">{{ ticket.subject }}</div>
+              <div class="text-xs text-gray-500 truncate max-w-xs">{{ ticket.description }}</div>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-600">
+              {{ ticket.user?.name }}
+            </td>
+            <td class="px-6 py-4 text-sm">
+              @if (ticket.assignee) {
+                <span class="text-blue-600 font-medium">👤 {{ ticket.assignee.name }}</span>
+              } @else {
+                <span class="text-gray-400 italic">Unassigned</span>
+              }
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase"
+                [ngClass]="{
+                  'bg-red-100 text-red-700': ticket.status === 'open',
+                  'bg-blue-100 text-blue-700': ticket.status === 'in_progress',
+                  'bg-green-100 text-green-700': ticket.status === 'resolved'
+                }">
+                {{ ticket.status.replace('_', ' ') }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-right space-x-2">
+              @if (!ticket.assignee) {
+                <button (click)="claimTicket(ticket.id)" class="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Claim</button>
+              } @else if (ticket.status === 'open' || ticket.status === 'in_progress') {
+                <button (click)="changeStatus(ticket.id, 'resolved')" class="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Resolve</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (isLoading()) {
+      <div class="p-12 text-center text-gray-400">Loading tickets...</div>
+    } @else if (tickets().length === 0) {
+      <div class="p-12 text-center text-gray-400">No tickets found.</div>
+    }
   </div>
 </div>
